@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<jnlp spec="1.0" xmlns:jfx="http://javafx.com" href="BEAT_ETL_v5.0.jnlp">
+  <information>
+    <title>BEAT_ETL_v5.0</title>
+    <vendor>Admin</vendor>
+    <description>null</description>
+    <offline-allowed/>
+  </information>
+  <resources>
+    <j2se version="1.6+" href="http://java.sun.com/products/autodl/j2se"/>
+    <jar href="BEAT_ETL_v5.0.jar" size="265477" download="eager" />
+    <jar href="lib\apache-ant-1.8.2.jar" size="1933743" download="eager" />
+    <jar href="lib\commons-collections4-4.1.jar" size="751238" download="eager" />
+    <jar href="lib\commons-net-3.3.jar" size="280983" download="eager" />
+    <jar href="lib\csvjdbc-1.0.31.jar" size="240958" download="eager" />
+    <jar href="lib\hibernate-core-4.0.1.Final.jar" size="4253629" download="eager" />
+    <jar href="lib\jsch-0.1.54.jar" size="278612" download="eager" />
+    <jar href="lib\jsqlparser-0.9.7.jar" size="358014" download="eager" />
+    <jar href="lib\jxl-2.6.12.jar" size="725735" download="eager" />
+    <jar href="lib\logback-classic-1.0.1.jar" size="248207" download="eager" />
+    <jar href="lib\logback-core-1.0.1.jar" size="329892" download="eager" />
+    <jar href="lib\slf4j-api-1.7.25.jar" size="41203" download="eager" />
+  </resources>
+  <applet-desc  width="800" height="600" main-class="com.javafx.main.NoJavaFXFallback"  name="BEAT_ETL_v5.0" >
+    <param name="requiredFXVersion" value="8.0+"/>
+  </applet-desc>
+  <jfx:javafx-desc  width="800" height="600" main-class="beat.BEAT_V5"  name="BEAT_ETL_v5.0" />
+  <update check="always"/>
+</jnlp>
