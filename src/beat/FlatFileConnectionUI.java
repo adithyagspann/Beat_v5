@@ -35,6 +35,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Pair;
+import org.slf4j.LoggerFactory;
 import remoteutility.FTPEngine;
 
 /**
@@ -43,6 +44,7 @@ import remoteutility.FTPEngine;
  */
 public class FlatFileConnectionUI {
 
+    private final static org.slf4j.Logger LOGGER = LoggerFactory.getLogger(FlatFileConnectionUI.class);
 // Create the custom dialog.
     private Dialog<Pair<String, String>> dialog;
     private ButtonType loginButtonType;
@@ -65,6 +67,7 @@ public class FlatFileConnectionUI {
     private FTPEngine ftpEngine;
 
     public List<String> readFF(String connPath) throws FileNotFoundException, IOException {
+        LOGGER.info("Reading the Flat File data : " + connPath);
         File connFile = new File(connPath);
         FileReader fileReader = new FileReader(connFile);
         BufferedReader br = new BufferedReader(fileReader);
@@ -78,7 +81,7 @@ public class FlatFileConnectionUI {
     }
 
     FlatFileConnectionUI(LoadFlatFilesTreeView lctv, VBox mainvbox, String connName) {
-
+        LOGGER.info("Building Flat File UI");
         try {
             this.lctv = lctv;
 
@@ -165,6 +168,7 @@ public class FlatFileConnectionUI {
             loginButton.setDisable(true);
             test.setDisable(true);
             if (!connName.isEmpty()) {
+                LOGGER.info("Loading existing FF " + connName + " for modifications");
                 List<String> connData = readFF("files/" + connName.substring(connName.lastIndexOf(".") + 1, connName.length()) + "/" + connName);
 
                 if (connData.size() == 2) {
@@ -188,6 +192,7 @@ public class FlatFileConnectionUI {
                 test.setDisable(false);
 
             } else {
+                LOGGER.info("Creating new FF ");
                 filetypecmb.valueProperty().addListener((observable, oldValue, newValue) -> {
 
                     if ((filetypecmb.getValue().toString().equals("TXT") || filetypecmb.getValue().toString().equals("CSV") || filetypecmb.getValue().toString().equals("JSON") || filetypecmb.getValue().toString().equals("XLSX") || filetypecmb.getValue().toString().equals("XML") || filetypecmb.getValue().toString().equals("XLS"))) {
@@ -221,6 +226,7 @@ public class FlatFileConnectionUI {
 
                 if (!filetypecmb.getValue().toString().trim().isEmpty() && !hosturl.getText().trim().isEmpty() && !jarpath.getText().trim().isEmpty()) {
                     //loginButton.setDisable(newValue.trim().isEmpty());
+
                     test.setDisable(newValue.trim().isEmpty());
                     loginButton.setDisable(true);
                     msglabel.setText("Message: Please Test to enable Add button");
@@ -255,7 +261,7 @@ public class FlatFileConnectionUI {
 
             //localfilebt
             localfilebt.setOnAction((ActionEvent event) -> {
-
+                LOGGER.info("Loading the local file");
                 String fname = "";
                 String fpath = "";
                 try {
@@ -281,7 +287,7 @@ public class FlatFileConnectionUI {
 
             //test file connection
             test.setOnAction((ActionEvent event) -> {
-
+                LOGGER.info("Testing the Loaded file using File type");
                 try {
 
                     if (remotefilecb.isSelected()) {
@@ -298,16 +304,20 @@ public class FlatFileConnectionUI {
                         }
 
                         if (file.isFile() && file.getAbsolutePath().contains(filetypecmb.getValue().toString().toLowerCase())) {
+                            LOGGER.info("File has been verified with file type successfully");
+
                             msglabel.setStyle("-fx-text-fill: green");
                             msglabel.setTooltip(new Tooltip(file.getAbsolutePath()));
                             msglabel.setText("Message: Format Matched ..." + file.getName());
                             loginButton.setDisable(false);
                         } else {
+                            LOGGER.info("File has failed while verifing with file type ");
                             msglabel.setStyle("-fx-text-fill: red");
                             msglabel.setText("Message: Unmatched File Format");
                         }
                     }
                 } catch (Exception ex) {
+                    LOGGER.error(ex.toString());
                     new ExceptionUI(ex);
                 }
 
@@ -337,41 +347,48 @@ public class FlatFileConnectionUI {
                 System.out.println("Clicked - Add Button");
 
                 if (remotefilecb.isSelected()) {
-                    File rfile = new File(jarpath.getText());
 
+                    File rfile = new File(jarpath.getText());
+                    LOGGER.info("Storing/Updating Remote Flat File: " + rfile.getAbsolutePath());
                     new SaveFF(rfile.getName(), hostType.getSelectionModel().getSelectedItem().toString(), hosturl.getText(), username.getText(), password.getText(), jarpath.getText(), filetypecmb.getValue().toString(), lctv);
 
                 } else {
                     System.out.println("File Name: " + file.getAbsolutePath());
+                    LOGGER.info("Storing/Updating Local Flat File: " + file.getAbsolutePath());
                     new SaveFF(file.getName(), file.getAbsolutePath().replace("\\", "/"), filetypecmb.getValue().toString(), lctv);
                 }
 
             });
         } catch (IOException ex) {
             Logger.getLogger(FlatFileConnectionUI.class.getName()).log(Level.SEVERE, null, ex);
+            LOGGER.info(ex.toString());
             new ExceptionUI(ex);
         }
 
     }
 
     private boolean checkFTPfile() throws JSchException, IOException {
+        LOGGER.info("Checking FTP File " + jarpath.getText() + " on server " + hosturl.getText());
         if (hostType.getSelectionModel().getSelectedItem().toString().equalsIgnoreCase("ftp")) {
-            System.out.println("FTP");
+
             ftpEngine = new FTPEngine(hosturl.getText().trim(), 21, username.getText().trim(), password.getText().trim());
             if (ftpEngine.checkFileExists(jarpath.getText().trim())) {
-
+                LOGGER.info("File is available on FTP server. Processing for further steps");
                 File rfilePath = new File(jarpath.getText());
                 if (rfilePath.getAbsolutePath().contains(filetypecmb.getValue().toString().toLowerCase())) {
+                    LOGGER.info("Format has been matched");
                     msglabel.setStyle("-fx-text-fill: green");
                     msglabel.setTooltip(new Tooltip(rfilePath.getAbsolutePath()));
                     msglabel.setText("Message: Format Matched ..." + rfilePath.getName());
 //                        loginButton.setDisable(false);
                     return true;
                 } else {
+                    LOGGER.info("Format has not been matched");
                     msglabel.setStyle("-fx-text-fill: red");
                     msglabel.setText("Message: Unmatched File Format");
                 }
             } else {
+                LOGGER.info("File doesn`t exists");
                 msglabel.setStyle("-fx-text-fill: red");
                 msglabel.setText("Message: File does not exists");
             }
@@ -379,30 +396,34 @@ public class FlatFileConnectionUI {
         } else if (hostType.getSelectionModel().getSelectedItem().toString().equalsIgnoreCase("sftp")) {
             ftpEngine = new FTPEngine(hosturl.getText().trim(), 22, username.getText().trim(), password.getText().trim());
             if (ftpEngine.checkFileExists(jarpath.getText().trim())) {
-
+                LOGGER.info("File is available on FTP server. Processing for further steps");
                 File rfilePath = new File(jarpath.getText());
                 if (rfilePath.getAbsolutePath().contains(filetypecmb.getValue().toString().toLowerCase())) {
+                    LOGGER.info("Format has been matched");
                     msglabel.setStyle("-fx-text-fill: green");
                     msglabel.setTooltip(new Tooltip(rfilePath.getAbsolutePath()));
                     msglabel.setText("Message: Format Matched ..." + rfilePath.getName());
 //                        loginButton.setDisable(false);
                     return true;
                 } else {
+                    LOGGER.info("Format has not been matched");
                     msglabel.setStyle("-fx-text-fill: red");
                     msglabel.setText("Message: Unmatched File Format");
                 }
             } else {
+                LOGGER.info("File doesn`t exists");
                 msglabel.setStyle("-fx-text-fill: red");
                 msglabel.setText("Message: File does not exists");
             }
         } else {
+            LOGGER.warn("Host Connection type has not been selected");
             new AlertUI("Select Host Connection Type");
         }
         return false;
     }
 
     private ObservableList getRemoteTypes() throws FileNotFoundException, IOException {
-
+        LOGGER.info("Getting RemoteTypes acceptable by application");
         FileReader fr = null;
         File file = new File("remotetypes");
         fr = new FileReader(file.getAbsoluteFile());

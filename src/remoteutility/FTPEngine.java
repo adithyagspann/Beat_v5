@@ -8,75 +8,59 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPSClient;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class FTPEngine {
-
+    
     private static FTPClient ftpClient;
-
+    private static Logger logger = LoggerFactory.getLogger(FTPEngine.class);
+    
     public FTPEngine(String hostname, int portno, String username, String password) throws IOException {
-
+        logger.info("Creating Connection to FTP server: " + hostname);
         ftpClient = new FTPClient();
         ftpClient.connect(hostname, portno);
         ftpClient.login(username, password);
+        logger.info("Connection Created to FTP server: " + hostname);
     }
-
-//    public boolean getFile(String remotePathWithFilename, String localPathWithFilename) throws FileNotFoundException, IOException {
-//        System.out.println("Processing the Data");
-//        File localfile = new File(localPathWithFilename);
-//
-//        if (!localfile.getParentFile().exists()) {
-//
-//            Files.createDirectory(Paths.get(localfile.getParent()));
-//        }
-//        InputStream fis = ftpClient.retrieveFileStream(remotePathWithFilename);
-//        FileOutputStream fos = new FileOutputStream(localfile);
-//
-//        byte[] bytesArray = new byte[5120];
-//        int bytesRead = -1;
-//        while ((bytesRead = fis.read(bytesArray)) != -1) {
-//            fos.write(bytesArray, 0, bytesRead);
-//        }
-//        
-//
-//        fis.close();
-//        fos.close();
-//        boolean status = ftpClient.completePendingCommand();
-////        System.out.println("Println: " + status);
-//
-//        return status;
-//
-//    }
+    
     public boolean getFile(String remotePathWithFilename, String localPathWithFilename) throws FileNotFoundException, IOException {
-        System.out.println("Processing the Data");
+//        System.out.println("Processing the Data");
+        logger.info("Processing the file download");
         File localfile = new File(localPathWithFilename);
         System.out.println("Local Path: " + localfile.getParentFile());
         if (!localfile.getParentFile().exists()) {
-            System.out.println("Create Directory Called");
+//            System.out.println("Create Directory Called");
             Files.createDirectory(Paths.get(localfile.getParent()));
         }
-
+        
         boolean status = false;
-
+        
         status = ftpClient.retrieveFile(remotePathWithFilename, new FileOutputStream(localPathWithFilename));
 
-        System.out.println("FTP File Download Process Completed");
+//        System.out.println("FTP File Download Process Completed");
+        logger.info("FTP File Download Process Completed");
         return status;
-
+        
     }
-
+    
     public boolean checkFileExists(String remoteName) throws IOException {
+        logger.info("Checking whether file "+remoteName+" exists on server");
         if (ftpClient.retrieveFileStream(remoteName) != null) {
+            logger.info(remoteName+" file available.");
             return true;
         }
-
+        logger.info(remoteName+" file not available.");
         return false;
-
+        
     }
-
+    
     public String getRemoteModTimeStamp(String fileName) throws IOException {
+        logger.info("Retreving time stamp of file: "+fileName);
         String timeStamp = ftpClient.getModificationTime(fileName);
-
-        return timeStamp.substring(timeStamp.indexOf(" ") + 1, timeStamp.length()).trim();
+        String time = timeStamp.substring(timeStamp.indexOf(" ") + 1, timeStamp.length()).trim();
+        logger.info("Time stamp of file: "+time);
+        return time;
     }
 
 //    public static void main(String[] args) {

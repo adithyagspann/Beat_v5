@@ -14,6 +14,7 @@ import jxl.read.biff.BiffException;
 import net.sf.jsqlparser.JSQLParserException;
 import org.hibernate.engine.jdbc.internal.BasicFormatterImpl;
 import org.hibernate.engine.jdbc.internal.Formatter;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -25,6 +26,7 @@ import org.hibernate.engine.jdbc.internal.Formatter;
  */
 public class STMExcellDataProcess {
 
+    private static org.slf4j.Logger logger = LoggerFactory.getLogger(STMExcellDataProcess.class);
     private Workbook excelFile;
     private Sheet workSheet;
     private STMBean sTMBean;
@@ -37,6 +39,7 @@ public class STMExcellDataProcess {
     private int i;
 
     public STMExcellDataProcess(String workBook) throws IOException, BiffException {
+        logger.info("Creating connection to STM file : "+workBook);
         excelFile = Workbook.getWorkbook(new File(workBook));
         workSheet = excelFile.getSheet(0);
 
@@ -49,6 +52,7 @@ public class STMExcellDataProcess {
 
     /*Getting the Connection Data*/
     public ObservableMap getConnectionData() {
+        logger.info("Retreving Connection Details from STM");
         connectionData.clear();
 
         //Title Null Execption
@@ -139,13 +143,14 @@ public class STMExcellDataProcess {
         }
         connectionData.put(workSheet.getCell(0, 17).getContents(), workSheet.getCell(1, 17).getContents());
         connectionData.put(workSheet.getCell(0, 18).getContents(), workSheet.getCell(1, 1).getContents());
-
+logger.info("Retrieved Connection Details from STM");
         return connectionData;
     }
 
     /*Getting Common Bussiness and Special rule*/
     public ObservableMap getComSpecialRule() {
         //Set Exception if null
+        logger.info("Retrieving  Special rules from STM");
         comSplData.put("common_rule", workSheet.getCell(3, 2).getContents());
 
         if (!workSheet.getCell(7, 2).getContents().isEmpty() && !workSheet.getCell(7, 2).getContents().equals("")) {
@@ -161,12 +166,13 @@ public class STMExcellDataProcess {
         } else {
             exceptionData.append(++i).append(". Source Key Columns Cannot be Empty!\n");
         }
-
+logger.info("Retrieved  Special rules from STM");
         return comSplData;
     }
 
     /*Getting the STM Transformation Rules*/
     public ObservableList<STMBean> getSTMTranData() throws JSQLParserException {
+        logger.info("Processing table metadata and source transformation rule from STM");
         System.out.println("getSTMTranData called");
 
         sTMList.clear();
@@ -226,11 +232,12 @@ public class STMExcellDataProcess {
 
             sTMList.add(sTMBean);
         }
-
+logger.info("Processed table metadata and source transformation rule from STM");
         return sTMList;
     }
 
     public void getExecptionData() throws Exception {
+        logger.info("Notifying exception to user");
         if (!exceptionData.toString().isEmpty()) {
             temp = exceptionData.toString();
             exceptionData.delete(0, exceptionData.length());
@@ -243,7 +250,8 @@ public class STMExcellDataProcess {
     }
 
     public String getSrcTranRuleGen(String dbName, String tableName, String srcColName, String trgColName) throws JSQLParserException {
-        System.out.println("getSrcTranRuleGen called");
+//        System.out.println("getSrcTranRuleGen called");
+        logger.info("Generating Source transformation rule query");
         String formatted_sql_code = null;
         if (workSheet.getCell(1, 17).getContents().equalsIgnoreCase("db")) {
 
@@ -252,11 +260,11 @@ public class STMExcellDataProcess {
             formatted_sql_code = f.format(qry);
             sqlparser.checkSqlQuery(formatted_sql_code);
         } else {
-            String qry = "select " + srcColName + " as " + trgColName + " from " + dbName + "/" + tableName;
+//            String qry = "select " + srcColName + " as " + trgColName + " from " + dbName + "/" + tableName;
+String qry = "select " + srcColName + " as " + trgColName + " from "  + tableName;
             formatted_sql_code = qry;
         }
 
-        
         return formatted_sql_code.trim();
     }
 

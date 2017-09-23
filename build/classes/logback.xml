@@ -14,7 +14,7 @@
 
 
   <appender name="FILE" class="ch.qos.logback.core.FileAppender">
-    <file> Beat-${byDay}.txt </file>
+    <file> logs/Beat-${byDay}.log </file>
     <append>true</append>
     <encoder>
       <pattern>%-4relative [%thread] %-5level %logger{35} - %msg%n</pattern>

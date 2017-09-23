@@ -75,7 +75,7 @@ class LoadFlatFilesTreeView {
 
     public LoadFlatFilesTreeView(TreeView flatfiletree) {
         
-        flatfiletree.getChildrenUnmodifiable().clear();
+//        flatfiletree.getChildrenUnmodifiable.clear();
         this.flatfiletree = flatfiletree;
         ImageView rootIcon = new ImageView(new Image(getClass().getResourceAsStream("/icon/fficon.png")));
         flatfiles = new TreeItem<>("Flat Files",rootIcon);
@@ -107,8 +107,9 @@ class LoadFlatFilesTreeView {
         flatfiles.getChildren().add(json);
         flatfiles.getChildren().add(excel);
         flatfiles.getChildren().add(xml);
-        
+          System.out.println("Flat Files: "+flatfiles.getValue());
         flatfiletree.setRoot(flatfiles);
+      
        
         getFileNames();
         

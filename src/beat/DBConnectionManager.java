@@ -20,6 +20,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -27,6 +28,7 @@ import javafx.collections.ObservableList;
  */
 public class DBConnectionManager {
 
+    private final static org.slf4j.Logger LOGGER = LoggerFactory.getLogger(DBConnectionManager.class);
     private String JDBCDRIVER = "";
     private String DB_URL = "";
     private String USER = "";
@@ -40,7 +42,7 @@ public class DBConnectionManager {
     }
 
     public DBConnectionManager(String driver, String url, String uid, String pass, String jarpath) throws ClassNotFoundException, SQLException {
-
+        LOGGER.info("Preparing for DB Connection Manager");
         JDBCDRIVER = driver;
         DB_URL = url;
         USER = uid;
@@ -60,10 +62,12 @@ public class DBConnectionManager {
         } else {
             conn = DriverManager.getConnection(DB_URL);
         }
+        LOGGER.info("DB Connecetion has estabilished successfully: " + conn.getMetaData().getURL());
     }
 
     public Connection getDBConFromFile(String conname) throws FileNotFoundException, IOException, ClassNotFoundException, SQLException {
         System.out.println("Creating DB Connection");
+        LOGGER.info("Creating DB Connection from Connection File: " + conname);
         FileReader fr = null;
         File file = new File("conn/" + conname + ".con");
         fr = new FileReader(file.getAbsoluteFile());
@@ -95,12 +99,13 @@ public class DBConnectionManager {
     }
 
     public Connection getDBCon() {
+        LOGGER.info("DB Connection retrieved: " + conn);
         return conn;
     }
 
     //To Get databases from the connectionss
     public List getDatabaseNames(Connection conn, String conname) throws SQLException, IOException {
-
+        LOGGER.info("Retreving DB Name for connection: " + conn);
         List dblist = new ArrayList();
 
         String db_sql_type = new ReadPropertyFile().getDBPropval(conname);
@@ -120,14 +125,14 @@ public class DBConnectionManager {
             dblist.add(tablename);
 //            System.out.println("Database Name : " + tablename);
         } while (tabs.next());
-
+        LOGGER.info("Retrived DB Name from connection: " + conn);
         return dblist;
 
     }
 
     //To GET SCHEMA NAMES Woking for all DBs  
     public List getSchemaNames(Connection conn, String conname, String db_name) throws SQLException, IOException {
-
+        LOGGER.info("Retreving Schema Name for connection: " + conn);
         List schlist = new ArrayList();
 
         ReadPropertyFile rpf = new ReadPropertyFile();
@@ -171,12 +176,13 @@ public class DBConnectionManager {
             } while (tabs.next());
 
         }
+        LOGGER.info("Retrived Schema Name from connection: " + conn);
         return schlist;
     }
 
     //To GET SCHEMA NAMES Woking for all DBs  
     public List getSchemaNames(Connection conn, String conname) throws SQLException, IOException {
-
+        LOGGER.info("Retreving Schema Name for connection: " + conn);
         List schlist = new ArrayList();
 
         String schema_sql_type = new ReadPropertyFile().getSchemaPropval(conname);
@@ -201,12 +207,13 @@ public class DBConnectionManager {
         }
 
         Collections.sort(schlist);
+        LOGGER.info("Retrived Schema Name from connection: " + conn);
         return schlist;
     }
 
 //to get table names    
     public List getTableNames(Connection conn, String conname, String SCHEMA_NAME) throws IOException, SQLException {
-
+        LOGGER.info("Retriving Table Name from Schema: " + SCHEMA_NAME);
         List tablist = new ArrayList();
         String tableType[] = {"TABLE", "T"};
         int index = 3;
@@ -275,12 +282,13 @@ public class DBConnectionManager {
 
         }
 
+        LOGGER.info("Retrived Table Name from Schema: " + SCHEMA_NAME);
         return tablist;
     }
 
     //To get view names
     public List getViewNames(Connection conn, String conname, String SCHEMA_NAME) throws IOException, SQLException {
-
+        LOGGER.info("Retriving View Name from Schema: " + SCHEMA_NAME);
         List viewlist = new ArrayList();
         String viewType[] = {"VIEW", "V"};
         int index = 3;
@@ -331,12 +339,13 @@ public class DBConnectionManager {
             } while (views.next());
 
         }
-
+        LOGGER.info("Retrived View Name from Schema: " + SCHEMA_NAME);
         return viewlist;
     }
 
     public List getColNames(Connection conn, String SQL) throws SQLException {
 
+        LOGGER.info("Retreving Column Name: " + SQL);
         List data = new ArrayList();
 
         ResultSet rs = conn.createStatement().executeQuery(SQL);
@@ -356,12 +365,14 @@ public class DBConnectionManager {
             }
 
         }
+        LOGGER.info("Retreved Column Name: " + SQL);
         return data;
 
     }
 
     public List getColType(Connection conn, String SQL) throws SQLException {
         //System.out.println("SQl: " + SQL);
+        LOGGER.info("Retreving Column Type: " + SQL);
         List data = new ArrayList();
 
         ResultSet rs = conn.createStatement().executeQuery(SQL);
@@ -381,12 +392,13 @@ public class DBConnectionManager {
             }
             //System.out.println(i + ") " + mtdat);
         }
+        LOGGER.info("Retreved Column Type: " + SQL);
         return data;
 
     }
 
     public List getKeyColNames(Connection conn, String SCHEMA_NAME, String table_name) throws SQLException {
-
+        LOGGER.info("Retreving Key Column: " + SCHEMA_NAME + ", " + table_name);
         List data = new ArrayList();
 
         String dbtype = conn.getClass().getName();
@@ -420,24 +432,27 @@ public class DBConnectionManager {
             }
 
         } catch (Exception e) {
+            LOGGER.error(e.toString());
             System.out.println(e);
         }
+        LOGGER.info("Retreved Key Column: " + SCHEMA_NAME + ", " + table_name);
         return data;
     }
 
-    public ObservableList getDataFromQuery(Connection conn, String qry) {
-        System.out.println("Fetching data from DB: "+qry);
+    public ObservableList getDataFromQuery(Connection conn, String qry) throws SQLException {
+        System.out.println("Fetching data from DB: " + qry);
+        LOGGER.info("Fetching the Data from query: " + qry);
         ObservableList rows = FXCollections.observableArrayList();
-        try {
+
             //throws SQLException {
 
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery(qry);
-           
+
             while (rs.next()) {
                 ObservableList cols = FXCollections.observableArrayList();
                 int colcount = rs.getMetaData().getColumnCount();
- 
+
                 for (int i = 0; i < colcount; i++) {
                     if (rs.getString(i + 1) != null) {
                         if (rs.getString(i + 1).contains(",")) {
@@ -448,18 +463,16 @@ public class DBConnectionManager {
                             cols.add(rs.getString(i + 1));
                         }
                     } else {
-
-                        cols.add(rs.getString(i + 1));
+//                        cols.add(rs.getString(i + 1));
+cols.add("");
                     }
                 }
 
                 rows.add(cols);
             }
 
-        } catch (SQLException ex) {
-            Logger.getLogger(DBConnectionManager.class.getName()).log(Level.SEVERE, null, ex);
-            ex.printStackTrace();
-        }
+  
+        LOGGER.info("Fetch the Data from query: " + qry);
         return rows;
     }
 

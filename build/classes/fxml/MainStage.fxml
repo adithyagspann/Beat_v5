@@ -377,7 +377,7 @@
                                                                                           <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
                                                                                        </HBox.margin>
                                                                                     </Label>
-                                                                                    <TextField fx:id="stm_conTitle_txt_field" HBox.hgrow="ALWAYS">
+                                                                                    <TextField fx:id="stm_conTitle_txt_field" editable="false" HBox.hgrow="ALWAYS">
                                                                                        <HBox.margin>
                                                                                           <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
                                                                                        </HBox.margin>
@@ -387,7 +387,7 @@
                                                                                           <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
                                                                                        </HBox.margin>
                                                                                     </Label>
-                                                                                    <TextField fx:id="stm_conAut_txt_field" HBox.hgrow="ALWAYS">
+                                                                                    <TextField fx:id="stm_conAut_txt_field" editable="false" HBox.hgrow="ALWAYS">
                                                                                        <HBox.margin>
                                                                                           <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
                                                                                        </HBox.margin>
@@ -397,7 +397,7 @@
                                                                                           <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
                                                                                        </HBox.margin>
                                                                                     </Label>
-                                                                                    <TextField fx:id="stm_conVer_txt_field" HBox.hgrow="ALWAYS">
+                                                                                    <TextField fx:id="stm_conVer_txt_field" editable="false" HBox.hgrow="ALWAYS">
                                                                                        <HBox.margin>
                                                                                           <Insets bottom="2.0" left="2.0" right="10.0" top="2.0" />
                                                                                        </HBox.margin>
@@ -433,13 +433,13 @@
                                                                                           <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
                                                                                        </HBox.margin>
                                                                                     </Label>
-                                                                                    <TextArea fx:id="commonRuletxtar" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
+                                                                                    <TextArea fx:id="commonRuletxtar" editable="false" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
                                                                                        <HBox.margin>
                                                                                           <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
                                                                                        </HBox.margin>
                                                                                     </TextArea>
                                                                                     <Label layoutX="12.0" layoutY="27.0" text="Source Key Columns" textFill="WHITE" HBox.hgrow="ALWAYS" />
-                                                                                    <TextArea fx:id="sourceKeyColtxtar" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
+                                                                                    <TextArea fx:id="sourceKeyColtxtar" editable="false" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
                                                                                        <HBox.margin>
                                                                                           <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
                                                                                        </HBox.margin>
@@ -449,7 +449,7 @@
                                                                                           <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
                                                                                        </HBox.margin>
                                                                                     </Label>
-                                                                                    <TextArea fx:id="targetKeyColtxtar" layoutX="97.0" layoutY="12.0" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
+                                                                                    <TextArea fx:id="targetKeyColtxtar" editable="false" layoutX="97.0" layoutY="12.0" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
                                                                                        <HBox.margin>
                                                                                           <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
                                                                                        </HBox.margin>

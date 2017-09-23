@@ -74,6 +74,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Callback;
@@ -266,6 +267,7 @@ public class MainStageController implements Initializable {
     private List fileWhereClause;
     @FXML
     private CheckBox srcExec, trgExec;
+    private boolean manualTestCaseExec;
 
     @FXML
     private void dbAddButtonAction(ActionEvent event) {
@@ -288,6 +290,7 @@ public class MainStageController implements Initializable {
         logger.info("Clicked on  Add File Button");
         //CALLING ADD FILE CONNECTION UI
         new FlatFileConnectionUI(lfftv, mainvbox, "");
+        new LoadFlatFilesTreeView(flatfilelist);
 
     }
 
@@ -520,6 +523,7 @@ public class MainStageController implements Initializable {
                 System.out.println("clicked table :" + msb);
                 try {
                     //place ur code
+                    manualTestCaseExec = true;
                     processSinglTestcase(msb.getTestCaseID().getValue());
                 } catch (Exception ex) {
                     Logger.getLogger(MainStageController.class.getName()).log(Level.SEVERE, null, ex);
@@ -683,97 +687,97 @@ public class MainStageController implements Initializable {
         String nodename = nodeselect.getValue();
         System.out.println("Manual: " + tabmantesting.isSelected());
         System.out.println("Auto: " + tabautotesting.isSelected());
-        if (tabmantesting.isSelected()) {
-            try {
+//        if (tabmantesting.isSelected()) {
+//            try {
+//
+//                if (nodename.equalsIgnoreCase("connections")) {
+//                    dbrghtclkmenu.getItems().get(0).setDisable(false);
+//                    dbrghtclkmenu.getItems().get(1).setDisable(true);
+//                    dbrghtclkmenu.getItems().get(2).setDisable(true);
+//                    dbrghtclkmenu.getItems().get(3).setDisable(true);
+//                    dbrghtclkmenu.getItems().get(4).setDisable(true);
+//
+//                } else if (nodeselect.getParent().getValue().equalsIgnoreCase("connections")) {
+//                    dbrghtclkmenu.getItems().get(0).setDisable(false);
+//                    dbrghtclkmenu.getItems().get(1).setDisable(false);
+//                    dbrghtclkmenu.getItems().get(2).setDisable(false);
+//                    dbrghtclkmenu.getItems().get(3).setDisable(false);
+//                    dbrghtclkmenu.getItems().get(4).setDisable(false);
+//                }
+//            } catch (Exception e) {
+//                logger.error("Execption Raised at DB right Click : " + e.toString());
+//            }
+//
+//        } else {
+        try {
 
-                if (nodename.equalsIgnoreCase("connections")) {
-                    dbrghtclkmenu.getItems().get(0).setDisable(false);
-                    dbrghtclkmenu.getItems().get(1).setDisable(true);
-                    dbrghtclkmenu.getItems().get(2).setDisable(true);
-                    dbrghtclkmenu.getItems().get(3).setDisable(true);
-                    dbrghtclkmenu.getItems().get(4).setDisable(true);
+            if (nodename.equalsIgnoreCase("connections")) {
 
-                } else if (nodeselect.getParent().getValue().equalsIgnoreCase("connections")) {
-                    dbrghtclkmenu.getItems().get(0).setDisable(false);
-                    dbrghtclkmenu.getItems().get(1).setDisable(false);
-                    dbrghtclkmenu.getItems().get(2).setDisable(false);
-                    dbrghtclkmenu.getItems().get(3).setDisable(false);
-                    dbrghtclkmenu.getItems().get(4).setDisable(false);
-                }
-            } catch (Exception e) {
+                dbrghtclkmenu.getItems().get(0).setDisable(false);
+                dbrghtclkmenu.getItems().get(1).setDisable(true);
+                dbrghtclkmenu.getItems().get(2).setDisable(true);
+                dbrghtclkmenu.getItems().get(3).setDisable(true);
+                dbrghtclkmenu.getItems().get(4).setDisable(true);
+            }
+
+            if (nodename.contains("(#") && nodename.contains("#)")) {
+
+                dbrghtclkmenu.getItems().get(0).setDisable(false);
+                dbrghtclkmenu.getItems().get(1).setDisable(true);
+                dbrghtclkmenu.getItems().get(2).setDisable(true);
+                dbrghtclkmenu.getItems().get(3).setDisable(false);
+                dbrghtclkmenu.getItems().get(4).setDisable(false);
+            }
+
+            if (nodename.equalsIgnoreCase("Databases")) {
+
+                dbrghtclkmenu.getItems().get(0).setDisable(false);
+                dbrghtclkmenu.getItems().get(1).setDisable(true);
+                dbrghtclkmenu.getItems().get(2).setDisable(true);
+                dbrghtclkmenu.getItems().get(3).setDisable(true);
+                dbrghtclkmenu.getItems().get(4).setDisable(true);
 
             }
 
-        } else {
-            try {
+            if (nodeselect.getParent().getValue().equalsIgnoreCase("Databases")) {
+                dbrghtclkmenu.getItems().get(0).setDisable(false);
+                dbrghtclkmenu.getItems().get(1).setDisable(true);
+                dbrghtclkmenu.getItems().get(2).setDisable(true);
+                dbrghtclkmenu.getItems().get(3).setDisable(true);
+                dbrghtclkmenu.getItems().get(4).setDisable(true);
 
-                if (nodename.equalsIgnoreCase("connections")) {
-
-                    dbrghtclkmenu.getItems().get(0).setDisable(false);
-                    dbrghtclkmenu.getItems().get(1).setDisable(true);
-                    dbrghtclkmenu.getItems().get(2).setDisable(true);
-                    dbrghtclkmenu.getItems().get(3).setDisable(true);
-                    dbrghtclkmenu.getItems().get(4).setDisable(true);
-                }
-
-                if (nodename.contains("(#") && nodename.contains("#)")) {
-
-                    dbrghtclkmenu.getItems().get(0).setDisable(false);
-                    dbrghtclkmenu.getItems().get(1).setDisable(true);
-                    dbrghtclkmenu.getItems().get(2).setDisable(true);
-                    dbrghtclkmenu.getItems().get(3).setDisable(false);
-                    dbrghtclkmenu.getItems().get(4).setDisable(false);
-                }
-
-                if (nodename.equalsIgnoreCase("Databases")) {
-
-                    dbrghtclkmenu.getItems().get(0).setDisable(false);
-                    dbrghtclkmenu.getItems().get(1).setDisable(true);
-                    dbrghtclkmenu.getItems().get(2).setDisable(true);
-                    dbrghtclkmenu.getItems().get(3).setDisable(true);
-                    dbrghtclkmenu.getItems().get(4).setDisable(true);
-
-                }
-
-                if (nodeselect.getParent().getValue().equalsIgnoreCase("Databases")) {
-                    dbrghtclkmenu.getItems().get(0).setDisable(false);
-                    dbrghtclkmenu.getItems().get(1).setDisable(true);
-                    dbrghtclkmenu.getItems().get(2).setDisable(true);
-                    dbrghtclkmenu.getItems().get(3).setDisable(true);
-                    dbrghtclkmenu.getItems().get(4).setDisable(true);
-
-                }
-
-                if (nodeselect.getParent().getParent().getValue().equalsIgnoreCase("Databases")) {
-                    dbrghtclkmenu.getItems().get(0).setDisable(false);
-                    dbrghtclkmenu.getItems().get(1).setDisable(true);
-                    dbrghtclkmenu.getItems().get(2).setDisable(true);
-                    dbrghtclkmenu.getItems().get(3).setDisable(true);
-                    dbrghtclkmenu.getItems().get(4).setDisable(true);
-
-                }
-
-                if (nodename.equalsIgnoreCase("Tables") || nodename.equalsIgnoreCase("Views")) {
-                    dbrghtclkmenu.getItems().get(0).setDisable(false);
-                    dbrghtclkmenu.getItems().get(1).setDisable(true);
-                    dbrghtclkmenu.getItems().get(2).setDisable(true);
-                    dbrghtclkmenu.getItems().get(3).setDisable(true);
-                    dbrghtclkmenu.getItems().get(4).setDisable(true);
-                }
-
-                if (nodeselect.getParent().getValue().equalsIgnoreCase("Tables") || nodeselect.getParent().getValue().equalsIgnoreCase("Views")) {
-                    dbrghtclkmenu.getItems().get(0).setDisable(true);
-                    dbrghtclkmenu.getItems().get(1).setDisable(false);
-                    dbrghtclkmenu.getItems().get(2).setDisable(false);
-                    dbrghtclkmenu.getItems().get(3).setDisable(true);
-                    dbrghtclkmenu.getItems().get(4).setDisable(true);
-
-                }
-
-            } catch (Exception e) {
-                logger.info(e.toString());
             }
+
+            if (nodeselect.getParent().getParent().getValue().equalsIgnoreCase("Databases")) {
+                dbrghtclkmenu.getItems().get(0).setDisable(false);
+                dbrghtclkmenu.getItems().get(1).setDisable(true);
+                dbrghtclkmenu.getItems().get(2).setDisable(true);
+                dbrghtclkmenu.getItems().get(3).setDisable(true);
+                dbrghtclkmenu.getItems().get(4).setDisable(true);
+
+            }
+
+            if (nodename.equalsIgnoreCase("Tables") || nodename.equalsIgnoreCase("Views")) {
+                dbrghtclkmenu.getItems().get(0).setDisable(false);
+                dbrghtclkmenu.getItems().get(1).setDisable(true);
+                dbrghtclkmenu.getItems().get(2).setDisable(true);
+                dbrghtclkmenu.getItems().get(3).setDisable(true);
+                dbrghtclkmenu.getItems().get(4).setDisable(true);
+            }
+
+            if (nodeselect.getParent().getValue().equalsIgnoreCase("Tables") || nodeselect.getParent().getValue().equalsIgnoreCase("Views")) {
+                dbrghtclkmenu.getItems().get(0).setDisable(true);
+                dbrghtclkmenu.getItems().get(1).setDisable(false);
+                dbrghtclkmenu.getItems().get(2).setDisable(false);
+                dbrghtclkmenu.getItems().get(3).setDisable(true);
+                dbrghtclkmenu.getItems().get(4).setDisable(true);
+
+            }
+
+        } catch (Exception e) {
+            logger.error("Execption Raised at DB right Click : " + e.toString());
         }
+//        }
 
     }
 
@@ -971,7 +975,12 @@ public class MainStageController implements Initializable {
         ffrghtclkmenu.getItems().get(3).setDisable(true);
         ffrghtclkmenu.getItems().get(4).setDisable(true);
 
-        String nodename = nodeselect1.getValue();
+        String nodename = "";
+        if (nodeselect1.getValue() == null) {
+            nodename = "Flat Files";
+        } else {
+            nodename = nodeselect1.getValue();
+        }
         System.out.println("Selected Node :" + nodename);
         if (!nodename.equalsIgnoreCase("Flat Files") && !nodename.equalsIgnoreCase("TEXT") && !nodename.equalsIgnoreCase("CSV") && !nodename.equalsIgnoreCase("XML") && !nodename.equalsIgnoreCase("EXCEL") && !nodename.equalsIgnoreCase("JSON")) {
 
@@ -1041,8 +1050,17 @@ public class MainStageController implements Initializable {
 
         if (tabmantesting.isSelected()) {
 
-            connname = nodeselect.getValue();
-            tftrgconname.setText(connname);
+            if (dbtype.equalsIgnoreCase("SQL_SERVER")) {
+                tablename = nodeselect.getValue();
+                dbname = nodeselect.getParent().getParent().getParent().getValue() + "." + nodeselect.getParent().getParent().getValue();
+                connname = nodeselect.getParent().getParent().getParent().getParent().getParent().getValue();
+            } else {
+                tablename = nodeselect.getValue();
+                dbname = nodeselect.getParent().getParent().getValue();
+                connname = nodeselect.getParent().getParent().getParent().getParent().getValue();
+            }
+
+            tftrgconname.setText(connname + "::" + dbname + "::" + tablename);
 
         } else {
             if (dbtype.equalsIgnoreCase("SQL_SERVER")) {
@@ -1138,8 +1156,8 @@ public class MainStageController implements Initializable {
 
     @FXML
     private void ffConnDeltButtonAction(ActionEvent event) throws IOException {
-        System.out.println("Clicked - FF Conn Delete Button: " + nodeselect1.getValue());
-        Files.deleteIfExists(Paths.get("files/" + nodeselect1.getParent().getValue().toLowerCase() + "/" + nodeselect1.getValue()));
+        System.out.println("Clicked - FF Conn Delete Button: " + nodeselect1.getParent().getValue().toLowerCase());
+        Files.deleteIfExists(Paths.get("files/" + nodeselect1.getValue().toLowerCase().substring(nodeselect1.getValue().toLowerCase().lastIndexOf(".") + 1, nodeselect1.getValue().toLowerCase().length()) + "/" + nodeselect1.getValue()));
         new LoadFlatFilesTreeView(this.flatfilelist);
     }
 
@@ -1565,10 +1583,8 @@ public class MainStageController implements Initializable {
                 connname = tfsrcconname.getText().split("::")[0];
             } else if (tfsrcconname.getText().contains("FlatFile")) {
                 System.out.println("Connetion: " + tfsrcconname);
-//                connname = tfsrcconname.getText().split("::")[2].substring(0, connname.lastIndexOf("/"));
-
                 connname = tfsrcconname.getText().split("::")[2];
-//                connname = name.substring(0, name.lastIndexOf("/"));
+
                 System.out.println("Connetion name: " + connname);
             }
         } else if (type.equalsIgnoreCase("trg")) {
@@ -1577,10 +1593,8 @@ public class MainStageController implements Initializable {
                 connname = tftrgconname.getText().split("::")[0];
             } else if (tftrgconname.getText().contains("FlatFile")) {
 
-//                connname = tftrgconname.getText().split("::")[2];
-//                connname = tfsrcconname.getText().split("::")[2].substring(0, connname.lastIndexOf("/"));
-                connname = tfsrcconname.getText().split("::")[2];
-//                connname = name.substring(0, name.lastIndexOf("/"));
+                connname = tftrgconname.getText().split("::")[2];
+
             }
 
         }
@@ -1663,7 +1677,7 @@ public class MainStageController implements Initializable {
                             System.out.println("Table Name: " + this.getTableNameFromUI("src"));
 
                             //need to update qgen class
-                            total_cnt_testplan.put("Total_Cnt_Src_Testcase", qgen.getTotalCntQueries(this.getDBNameFromUI("src"), this.getTableNameFromUI("src"), src_table[0],getSourceType(), "src",  stmComSplRule.get("common_rule")).replace(".", ""));
+                            total_cnt_testplan.put("Total_Cnt_Src_Testcase", qgen.getTotalCntQueries(this.getDBNameFromUI("src"), this.getTableNameFromUI("src"), src_table[0], getSourceType(), "src", stmComSplRule.get("common_rule")).replace(".", ""));
                         } else {
                             //need to update qgen class
 //                            String[] srcColTran = getSrcTransRuleData();
@@ -1676,7 +1690,7 @@ public class MainStageController implements Initializable {
 //                                }
 //                            }
                             System.out.println("SRC DB");
-                            total_cnt_testplan.put("Total_Cnt_Src_Testcase", qgen.getTotalCntQueries(this.getDBNameFromUI("src"), this.getTableNameFromUI("src"),src_table[0], getSourceType(), "src", ""));
+                            total_cnt_testplan.put("Total_Cnt_Src_Testcase", qgen.getTotalCntQueries(this.getDBNameFromUI("src"), this.getTableNameFromUI("src"), src_table[0], getSourceType(), "src", ""));
 
                         }
 
@@ -1684,11 +1698,11 @@ public class MainStageController implements Initializable {
                         if (this.getTargetType().equalsIgnoreCase("ff")) {
                             System.out.println("TRG FIle");
                             //need to update qgen class
-                            total_cnt_testplan.put("Total_Cnt_Trg_Testcase", qgen.getTotalCntQueries(this.getDBNameFromUI("trg"), this.getTableNameFromUI("trg"),src_table[0], getTargetType(), "trg", stmComSplRule.get("target_rule")).replace(".", ""));
+                            total_cnt_testplan.put("Total_Cnt_Trg_Testcase", qgen.getTotalCntQueries(this.getDBNameFromUI("trg"), this.getTableNameFromUI("trg"), src_table[0], getTargetType(), "trg", stmComSplRule.get("target_rule")).replace(".", ""));
                         } else {
                             System.out.println("TRG DB");
                             //need to update qgen class
-                            total_cnt_testplan.put("Total_Cnt_Trg_Testcase", qgen.getTotalCntQueries(this.getDBNameFromUI("trg"), this.getTableNameFromUI("trg"),src_table[0], getTargetType(), "trg", stmComSplRule.get("target_rule")));
+                            total_cnt_testplan.put("Total_Cnt_Trg_Testcase", qgen.getTotalCntQueries(this.getDBNameFromUI("trg"), this.getTableNameFromUI("trg"), src_table[0], getTargetType(), "trg", stmComSplRule.get("target_rule")));
                         }
 
                         System.out.println("Count Test Plan :" + total_cnt_testplan);
@@ -1761,7 +1775,7 @@ public class MainStageController implements Initializable {
 
                         }
 
-                        System.out.println("Distinct Count Test Plan :" + dst_cnt_testplan.size());
+                        System.out.println("Distinct Count Test Plan :" + dst_cnt_testplan);
 
                     }
 
@@ -1783,7 +1797,7 @@ public class MainStageController implements Initializable {
 
                         }
 
-                        System.out.println("Duplicate Count Test Plan :" + dup_cnt_testplan.size());
+                        System.out.println("Duplicate Count Test Plan :" + dup_cnt_testplan);
 
                     }
 
@@ -1900,13 +1914,15 @@ public class MainStageController implements Initializable {
 
                             datasrcqry = datsrctranqry.getSrcDataValidationQuery(da, commonRuletxtar.getText());
                         } else {
-
+                            System.out.println("Src Validation data :");
                             datasrcqry = datsrctranqry.getSrcDataValidationQuery(da, getTableNameFromUI("src"), getDBNameFromUI("src"), commonRuletxtar.getText().toLowerCase(), getSourceType());
                         }
                         STMDataValidationTrgQueryGenerator dattrgTranqry = new STMDataValidationTrgQueryGenerator();
                         if (getTargetType().equalsIgnoreCase("db")) {
+                            System.out.println("Trg Validation data DB:");
                             datatrgqry = dattrgTranqry.getFinalDataSelectQuery(da, this.getDBNameFromUI("trg") + "." + this.getTableNameFromUI("trg"), stmComSplRule.get("target_rule"));
                         } else {
+                            System.out.println("Trg Validation data FF:");
                             datatrgqry = dattrgTranqry.getFinalDataSelectQuery(da, this.getTableNameFromUI("trg"), stmComSplRule.get("target_rule"));
 
                         }
@@ -1940,122 +1956,158 @@ public class MainStageController implements Initializable {
 
     }
 
-    //Method to execute and fetch the data of the test plan --Adithya
-    public ObservableList execueteTestPlan(ObservableList dataStore, String item, String srcQuery, String trgQuery, List srcHeader, List trgHeader, Connection srcCon, Connection trgCon, String srcType, String trgType) throws IOException, ClassNotFoundException, SQLException, Exception {
+    //Method to execute and fetch the data of the test plan --Adithyathrows IOException, ClassNotFoundException, SQLException, Exception 
+    public ObservableList execueteTestPlan(ObservableList dataStore, String item, String srcQuery, String trgQuery, List srcHeader, List trgHeader, Connection srcCon, Connection trgCon, String srcType, String trgType) throws Exception {
 
         //Display execution parameters
         //System.out.println("execueteTestPlan Called");
         ObservableList srcResult = null;
         ObservableList trgResult = null;
+        DBConnectionManager dbConManager = null;
+        Connection srccon1 = null, trgcon1 = null;
+        try {
+            SqlParser sqlParser = new SqlParser();
+            if (srcType.equalsIgnoreCase("db") && trgType.equalsIgnoreCase("db")) {
+                System.out.println("Exec Start");
+                dbConManager = new DBConnectionManager();
+                srccon1 = dbConManager.getDBConFromFile(stmConData.get("*Source Host Name"));
+                trgcon1 = dbConManager.getDBConFromFile(stmConData.get("*Target Host Name"));
+                System.out.println("Exec Connection End");
+                srcResult = dbConManager.getDataFromQuery(srccon1, srcQuery);
+                trgResult = dbConManager.getDataFromQuery(trgcon1, trgQuery);
+                System.out.println("Got Data: ");
 
-        SqlParser sqlParser = new SqlParser();
-        if (srcType.equalsIgnoreCase("db") && trgType.equalsIgnoreCase("db")) {
-            System.out.println("Exec Start");
-            DBConnectionManager dbConManager = new DBConnectionManager();
-            Connection srccon1 = dbConManager.getDBConFromFile(stmConData.get("*Source Host Name"));
-            Connection trgcon1 = dbConManager.getDBConFromFile(stmConData.get("*Target Host Name"));
-            System.out.println("Exec Connection End");
-            srcResult = dbConManager.getDataFromQuery(srccon1, srcQuery);
-            trgResult = dbConManager.getDataFromQuery(trgcon1, trgQuery);
-            System.out.println("Got Data: ");
-        } //db to file
-        else if (srcType.equalsIgnoreCase("db") && trgType.equalsIgnoreCase("ff")) {
-            System.out.println(" DB and Flat File  Data fetching");
-            DBConnectionManager dbConManager = new DBConnectionManager();
-            Connection srccon1 = dbConManager.getDBConFromFile(stmConData.get("*Source Host Name"));
-            srcResult = dbConManager.getDataFromQuery(srccon1, srcQuery);
-            csvengine = new CSVSQLEngine();
+            } //db to file
+            else if (srcType.equalsIgnoreCase("db") && trgType.equalsIgnoreCase("ff")) {
+                System.out.println(" DB and Flat File  Data fetching");
+                dbConManager = new DBConnectionManager();
+                srccon1 = dbConManager.getDBConFromFile(stmConData.get("*Source Host Name"));
+                srcResult = dbConManager.getDataFromQuery(srccon1, srcQuery);
+                csvengine = new CSVSQLEngine();
 
-            if (trgRTmpPath != null && !trgRTmpPath.isEmpty()) {
-                trgResult = csvengine.getFFTableData(trgRTmpPath, trgQuery);
-            } else {
-                trgResult = csvengine.getFFTableData(getDBNameFromUI("trg"), trgQuery);
+                if (trgRTmpPath != null && !trgRTmpPath.isEmpty()) {
+                    trgResult = csvengine.getFFTableData(trgRTmpPath, trgQuery);
+                } else {
+                    trgResult = csvengine.getFFTableData(getDBNameFromUI("trg"), trgQuery);
+                }
+
+            }//file to db
+            else if (srcType.equalsIgnoreCase("ff") && trgType.equalsIgnoreCase("db")) {
+                System.out.println("Flat File and DB Data fetching");
+                dbConManager = new DBConnectionManager();
+                trgcon1 = dbConManager.getDBConFromFile(stmConData.get("*Target Host Name"));
+                trgResult = dbConManager.getDataFromQuery(trgcon1, trgQuery);
+                csvengine = new CSVSQLEngine();
+
+                if (srcRTmpPath != null && !srcRTmpPath.isEmpty()) {
+                    System.out.println("Src R TMp : " + srcRTmpPath);
+                    srcResult = csvengine.getFFTableData(srcRTmpPath, srcQuery);
+                } else {
+                    System.out.println("YI : " + getDBNameFromUI("src"));
+                    srcResult = csvengine.getFFTableData(getDBNameFromUI("src"), srcQuery);
+                }
+            }//file to file
+            else {
+                csvengine = new CSVSQLEngine();
+                System.out.println("Flat File Data Fetching");
+
+                if (trgRTmpPath != null && !trgRTmpPath.isEmpty()) {
+                    trgResult = csvengine.getFFTableData(trgRTmpPath, trgQuery);
+                } else {
+                    trgResult = csvengine.getFFTableData(getDBNameFromUI("trg"), trgQuery);
+                }
+
+                if (srcRTmpPath != null && !srcRTmpPath.isEmpty()) {
+                    srcResult = csvengine.getFFTableData(srcRTmpPath, srcQuery);
+                } else {
+                    srcResult = csvengine.getFFTableData(getDBNameFromUI("src"), srcQuery);
+                }
             }
 
-        }//file to db
-        else if (srcType.equalsIgnoreCase("ff") && trgType.equalsIgnoreCase("db")) {
-            System.out.println("Flat File and DB Data fetching");
-            DBConnectionManager dbConManager = new DBConnectionManager();
-            Connection trgcon1 = dbConManager.getDBConFromFile(stmConData.get("*Target Host Name"));
-            trgResult = dbConManager.getDataFromQuery(trgcon1, trgQuery);
-            csvengine = new CSVSQLEngine();
+            System.out.println("Item: " + item);
 
-            if (srcRTmpPath != null && !srcRTmpPath.isEmpty()) {
-                System.out.println("Src R TMp : " + srcRTmpPath);
-                srcResult = csvengine.getFFTableData(srcRTmpPath, srcQuery);
-            } else {
-                System.out.println("YI : " + getDBNameFromUI("src"));
-                srcResult = csvengine.getFFTableData(getDBNameFromUI("src"), srcQuery);
-            }
-        }//file to file
-        else {
-            csvengine = new CSVSQLEngine();
-            System.out.println("Flat File Data Fetching");
+            if (item.equals("total_cnts")) {
+                System.out.println("Total Count Data:");
 
-            if (trgRTmpPath != null && !trgRTmpPath.isEmpty()) {
-                trgResult = csvengine.getFFTableData(trgRTmpPath, trgQuery);
-            } else {
-                trgResult = csvengine.getFFTableData(getDBNameFromUI("trg"), trgQuery);
-            }
+                srcCnt = srcResult.get(0).toString().replaceAll("\\[", "").replaceAll("\\]", "");
+                trgCnt = trgResult.get(0).toString().replaceAll("\\[", "").replaceAll("\\]", "");
+                bean = new TotalCountBean();
+                bean.srcCnt.setValue(srcCnt);
+                bean.trgCnt.setValue(trgCnt);
+                bean.totCnt.setValue(bean.getSrcCnt().equals(bean.getTrgCnt()) ? "Passed" : "Failed");
 
-            if (srcRTmpPath != null && !srcRTmpPath.isEmpty()) {
-                srcResult = csvengine.getFFTableData(srcRTmpPath, srcQuery);
-            } else {
-                srcResult = csvengine.getFFTableData(getDBNameFromUI("src"), srcQuery);
-            }
-        }
+                dataStore.add(bean);
 
-        System.out.println("Item: " + item);
+            } else if (item.equals("tot_dat_val")) {
+                //System.out.println("Src Data : " + srcResult.toString().replaceAll("\\[", "").replaceAll("\\]", ""));
+                //System.out.println("Target Data: " + trgResult.toString().replaceAll("\\[", "").replaceAll("\\]", ""));
+                srcCmplResult = srcResult;
+                trgCmplResult = trgResult;
 
-        if (item.equals("total_cnts")) {
-            System.out.println("Total Count Data:");
+            } else if (item.equals("dup_cnts")) {
 
-            srcCnt = srcResult.get(0).toString().replaceAll("\\[", "").replaceAll("\\]", "");
-            trgCnt = trgResult.get(0).toString().replaceAll("\\[", "").replaceAll("\\]", "");
-            bean = new TotalCountBean();
-            bean.srcCnt.setValue(srcCnt);
-            bean.trgCnt.setValue(trgCnt);
-            bean.totCnt.setValue(bean.getSrcCnt().equals(bean.getTrgCnt()) ? "Passed" : "Failed");
+                System.out.println("dup_cnts: " + srcResult.toString().replaceAll("\\[", "").replaceAll("\\]", ""));
+                System.out.println("dup_cnts: " + trgResult.toString().replaceAll("\\[", "").replaceAll("\\]", ""));
+//            srcCnt = srcResult.get(0).toString().replaceAll("\\[", "").replaceAll("\\]", "");
+//            trgCnt = trgResult.get(0).toString().replaceAll("\\[", "").replaceAll("\\]", "");
 
-            dataStore.add(bean);
-
-        } else if (item.equals("tot_dat_val")) {
-            //System.out.println("Src Data : " + srcResult.toString().replaceAll("\\[", "").replaceAll("\\]", ""));
-            //System.out.println("Target Data: " + trgResult.toString().replaceAll("\\[", "").replaceAll("\\]", ""));
-            srcCmplResult = srcResult;
-            trgCmplResult = trgResult;
-
-        } else if (item.equals("dup_cnts")) {
-
-            System.out.println("dup_cnts: " + srcResult.toString().replaceAll("\\[", "").replaceAll("\\]", ""));
-            System.out.println("dup_cnts: " + trgResult.toString().replaceAll("\\[", "").replaceAll("\\]", ""));
-            srcCnt = srcResult.get(0).toString().replaceAll("\\[", "").replaceAll("\\]", "");
-            trgCnt = trgResult.get(0).toString().replaceAll("\\[", "").replaceAll("\\]", "");
-
-            CountsMaxMinBean countsMaxMinBean = new CountsMaxMinBean();
-            countsMaxMinBean.srcCol.setValue(sqlParser.getColumnNamefromQuery(srcQuery.replaceAll("/", ".")));
+//            CountsMaxMinBean countsMaxMinBean = new CountsMaxMinBean();
+//            countsMaxMinBean.srcCol.setValue(sqlParser.getColumnNamefromQuery(srcQuery.replaceAll("/", ".")));
+////            countsMaxMinBean.srcColCount.setValue(Integer.toString(Integer.parseInt(srcCnt) - Integer.parseInt(srcResult.toString().replaceAll("\\[", "").replaceAll("\\]", ""))));
+//            countsMaxMinBean.srcColCount.setValue(srcResult.toString().replaceAll("\\[", "").replaceAll("\\]", ""));
+//            countsMaxMinBean.trgCol.setValue(sqlParser.getColumnNamefromQuery(trgQuery.replaceAll("/", ".")));
+                String src = "";
+                if (srcResult.size() > 1) {
+                    src = Integer.toString(srcResult.size());
+                } else if (srcResult.isEmpty()) {
+                    src = "0";
+                } else {
+                    src = srcResult.get(0).toString().replace("[", "").replace("]", "");
+                }
+                CountsMaxMinBean countsMaxMinBean = new CountsMaxMinBean();
+                countsMaxMinBean.srcCol.setValue(sqlParser.getColumnNamefromQuery(srcQuery.replaceAll("/", ".")));
 //            countsMaxMinBean.srcColCount.setValue(Integer.toString(Integer.parseInt(srcCnt) - Integer.parseInt(srcResult.toString().replaceAll("\\[", "").replaceAll("\\]", ""))));
-            countsMaxMinBean.srcColCount.setValue(srcResult.toString().replaceAll("\\[", "").replaceAll("\\]", ""));
-            countsMaxMinBean.trgCol.setValue(sqlParser.getColumnNamefromQuery(trgQuery.replaceAll("/", ".")));
+                countsMaxMinBean.srcColCount.setValue(src);
+//            int src = Integer.toString(srcResult.size());
+//            countsMaxMinBean.srcColCount.setValue(srcResult.size() > 1 ? Integer.toString(srcResult.size()) : srcResult.get(0).toString());
+                countsMaxMinBean.trgCol.setValue(sqlParser.getColumnNamefromQuery(trgQuery.replaceAll("/", ".")));
 
-            //Issue while Counting the Data
+                String trg = "";
+                if (trgResult.size() > 1) {
+                    trg = Integer.toString(trgResult.size());
+                } else if (trgResult.isEmpty()) {
+                    trg = "0";
+                } else {
+                    trg = trgResult.get(0).toString().replace("[", "").replace("]", "");
+                }
 //            countsMaxMinBean.trgColCount.setValue(Integer.toString(Integer.parseInt(trgCnt) - Integer.parseInt(trgResult.toString().replaceAll("\\[", "").replaceAll("\\]", ""))));
-            countsMaxMinBean.trgColCount.setValue(trgResult.toString().replaceAll("\\[", "").replaceAll("\\]", ""));
-            countsMaxMinBean.result.setValue(countsMaxMinBean.getSrcColCount().equals(countsMaxMinBean.getTrgColCount()) ? "Passed" : "Failed");
+                countsMaxMinBean.trgColCount.setValue(trg);
+                countsMaxMinBean.result.setValue(countsMaxMinBean.getSrcColCount().equals(countsMaxMinBean.getTrgColCount()) ? "Passed" : "Failed");
 
-            dataStore.add(countsMaxMinBean);
+                dataStore.add(countsMaxMinBean);
 
-        } else //if (!item.equals("dup_cnts") && !item.equals("tot_dat_val") && !item.equals("total_cnts")) {
-        {
-            CountsMaxMinBean countsMaxMinBean = new CountsMaxMinBean();
-            countsMaxMinBean.srcCol.setValue(sqlParser.getColumnNamefromQuery(srcQuery.replaceAll("/", ".")));
-            countsMaxMinBean.srcColCount.setValue(srcResult.toString().replaceAll("\\[", "").replaceAll("\\]", ""));
-            countsMaxMinBean.trgCol.setValue(sqlParser.getColumnNamefromQuery(trgQuery.replaceAll("/", ".")));
-            countsMaxMinBean.trgColCount.setValue(trgResult.toString().replaceAll("\\[", "").replaceAll("\\]", ""));
-            countsMaxMinBean.result.setValue(countsMaxMinBean.getSrcColCount().equals(countsMaxMinBean.getTrgColCount()) ? "Passed" : "Failed");
+            } else //if (!item.equals("dup_cnts") && !item.equals("tot_dat_val") && !item.equals("total_cnts")) {
+            {
+                CountsMaxMinBean countsMaxMinBean = new CountsMaxMinBean();
+                countsMaxMinBean.srcCol.setValue(sqlParser.getColumnNamefromQuery(srcQuery.replaceAll("/", ".")));
+                countsMaxMinBean.srcColCount.setValue(srcResult.toString().replaceAll("\\[", "").replaceAll("\\]", ""));
+                countsMaxMinBean.trgCol.setValue(sqlParser.getColumnNamefromQuery(trgQuery.replaceAll("/", ".")));
+                countsMaxMinBean.trgColCount.setValue(trgResult.toString().replaceAll("\\[", "").replaceAll("\\]", ""));
+                countsMaxMinBean.result.setValue(countsMaxMinBean.getSrcColCount().equals(countsMaxMinBean.getTrgColCount()) ? "Passed" : "Failed");
 
-            dataStore.add(countsMaxMinBean);
+                dataStore.add(countsMaxMinBean);
 
+            }
+
+        } catch (Exception ex) {
+            throw ex;
+        } finally {
+            if (srccon1 != null) {
+                srccon1.close();
+            }
+            if (trgcon1 != null) {
+                trgcon1.close();
+            }
         }
 
         return dataStore;
@@ -3096,7 +3148,7 @@ public class MainStageController implements Initializable {
 
     @FXML
     public void clearResultButton(ActionEvent ae) {
-
+        logger.info("Clearing Data verification Tables");
         Map<String, TableView> resultTableList1 = getSelectedResultTableList(this.getSelectedTestCases());
         System.out.println("Clear Option: " + resultTableList1);
         for (Map.Entry<String, TableView> entry : resultTableList1.entrySet()) {
@@ -3113,11 +3165,12 @@ public class MainStageController implements Initializable {
         progstatus_label.setText("Let's Get Started");
         progressCompletedImage();
         dataValid_status_lbl.setText("Nothing to show");
-
+        logger.info("Cleared Data verification Tables");
     }
 
     //Storing the tableview into List
     public Map<String, TableView> getSelectedResultTableList(List checkOptions) {
+        logger.info("Selecting the Test Scenarios");
         resultTableList.clear();
         for (Object checkOption : checkOptions) {
             if (checkOption.equals("total_cnts")) {
@@ -3167,13 +3220,14 @@ public class MainStageController implements Initializable {
             }
 
         }
-
+        logger.info("Selected the Test Scenarios");
         return resultTableList;
     }
 
     //Storing the tableview into List
     public Map<String, ObservableList> getSelectedResultTableData(List checkOptions) {
         resultTableListData.clear();
+        logger.info("Loading Test Scenarios to data saving or for other data");
         for (Object checkOption : checkOptions) {
             if (checkOption.equals("total_cnts")) {
 
@@ -3222,26 +3276,62 @@ public class MainStageController implements Initializable {
             }
 
         }
-
+        logger.info("Loaded Test Scenarios to data saving or for other data");
         return resultTableListData;
     }
 
+    String resultsExport = "";
+
     @FXML
     public void saveResultBtn(ActionEvent ae) {
-        saveTestResults(getSelectedTestCases());
+        Stage mainstage = (Stage) mainvbox.getScene().getWindow();
+        DirectoryChooser directoryChooser = new DirectoryChooser();
+        FileChooser fc = new FileChooser();
+        File dirName = null;
+
+        if (tabmantesting.isSelected()) {
+            if (stmFile != null) {
+                String file = stmFile.getName();
+                String fileName = file.substring(0, file.lastIndexOf(".") + 1) + "_results.xls";
+                dirName = directoryChooser.showDialog(mainstage);
+                if (dirName != null) {
+                    resultsExport = dirName.getAbsolutePath() + "/" + fileName;
+                }
+
+            } else {
+                dirName = fc.showOpenDialog(mainstage);
+                if (dirName != null) {
+                    resultsExport = dirName.getAbsolutePath();
+                }
+            }
+        } else {
+            String file = stmFile.getName();
+            String fileName = file.substring(0, file.lastIndexOf(".") + 1) + "_results.xls";
+            dirName = directoryChooser.showDialog(mainstage);
+            if (dirName != null) {
+                resultsExport = dirName.getAbsolutePath() + "/" + fileName;
+            }
+        }
+
+        if (!resultsExport.isEmpty()) {
+            saveTestResults(getSelectedTestCases());
+        }
+
     }
 
     public void saveTestResults(List checkOptions) {
-
+        logger.info("Saving Test data to excel");
         Map<String, TableView> resultTableList = getSelectedResultTableList(checkOptions);
         WritableWorkbook wbook;
         WritableSheet shSheet;
         WritableSheet tmpSheet;
-
+        File xlsFile = null;
         if (stmFile != null) //create excel sheet
         {
             try {
-                wbook = Workbook.createWorkbook(new File(stmFile.toString().substring(0, stmFile.toString().lastIndexOf('.')) + "_Results.xls"));
+//                xlsFile = new File(stmFile.toString().substring(0, stmFile.toString().lastIndexOf('.')) + "_Results.xls");
+                xlsFile = new File(resultsExport);
+                wbook = Workbook.createWorkbook(xlsFile);
 
 //                System.out.println("File Name: " + esbStmFile.getName().substring(0, esbStmFile.getName().lastIndexOf('.')));
                 int mapIndex = 0;
@@ -3359,12 +3449,13 @@ public class MainStageController implements Initializable {
 
                 wbook.write();
                 wbook.close();
-
+                logger.info("Saved Test data to excel: " + xlsFile);
                 new AlertUI("Results Saved Successfully");
 
             } catch (IOException | WriteException ex) {
                 Logger.getLogger(MainStageController.class
                         .getName()).log(Level.SEVERE, null, ex);
+                logger.error(ex.toString());
                 new ExceptionUI(ex);
 
             }
@@ -3387,6 +3478,7 @@ public class MainStageController implements Initializable {
     }
 
     private void automatedTestCase() {
+        logger.info("Processing Automated Manual Test Cases");
         progstatus_label.setText("Load the Test Cases..");
         progressLoadingImage();
 
@@ -3463,10 +3555,12 @@ public class MainStageController implements Initializable {
                     System.out.println("SRC: " + srcf);
                     System.out.println("TRG: " + trgf);
                     if (!srcf.exists() && !srcf.isFile()) {
+                        logger.error("Source Host doesn't exists: " + srcf);
                         progstatus_label.setText("Error src con file not found");
                         progressCompletedImage();
                         new ExceptionUI(new Exception("Source Host Connection not found"));
                     } else if (!trgf.exists() && !trgf.isFile()) {
+                        logger.error("Target Host doesn't exists: " + trgf);
                         progstatus_label.setText("Error trg con file not found");
                         progressCompletedImage();
                         new ExceptionUI(new Exception("Target Host Connection not found"));
@@ -3478,6 +3572,7 @@ public class MainStageController implements Initializable {
                         } else {
                             setConnName(tftrgconname, trgconn, "", "", trgconn.substring(trgconn.lastIndexOf(".") + 1, trgconn.length()));
                             if (tftrgconname.getText().toLowerCase().contains("@")) {
+                                logger.info("Checking the Target Remote file");
                                 trgRTmpPath = getRemoteFile(tftrgconname, "files/" + trgconn.substring(trgconn.lastIndexOf(".") + 1, trgconn.length()) + "/" + trgconn);
                             }
                         }
@@ -3488,6 +3583,7 @@ public class MainStageController implements Initializable {
                             setConnName(tfsrcconname, srcconn, "", "", srcconn.substring(srcconn.lastIndexOf(".") + 1, srcconn.length()));
                             logger.info("Setting Manual Connection : " + tfsrcconname.getText() + " :: " + srcconn);
                             if (tfsrcconname.getText().toLowerCase().contains("@")) {
+                                logger.info("Checking the Source Remote file");
                                 srcRTmpPath = getRemoteFile(tfsrcconname, "files/" + srcconn.substring(srcconn.lastIndexOf(".") + 1, srcconn.length()) + "/" + srcconn);
                             }
                         }
@@ -3794,7 +3890,7 @@ public class MainStageController implements Initializable {
                 connValue = this.getConnNameFromUI(connArea);
             }
         }
-
+        System.out.println("Connvalue: " + connValue);
         return connValue;
     }
 
@@ -3802,21 +3898,26 @@ public class MainStageController implements Initializable {
         SqlParser sqlParser = new SqlParser();
         System.out.println("Entered  - executeSinglTestcase");
 
-        manualsrctabview.getItems().clear();
-        manualtrgtabview.getItems().clear();
-        manualunmatchedtrgtabview.getItems().clear();
-        manualunmatchedsrctabview.getItems().clear();
-
         //System.out.println("Testcase Row Num:" +tcid +":" +tcidmap.get(tcid));
         String trgqry = trgtcidmap.get(tcid);
         String srcqry = srctcidmap.get(tcid);
 
-        System.out.println("trgqry : " + trgqry);
-        System.out.println("srcqry : " + srcqry);
-
+//        System.out.println("trgqry : " + trgqry);
+//        System.out.println("srcqry : " + srcqry);
         //now focus to manaul tab
-        SingleSelectionModel<Tab> selectionModel = manualResultTabpane.getSelectionModel();
-        selectionModel.select(manualsrcdttab);
+//        SingleSelectionModel<Tab> selectionModel = manualResultTabpane.getSelectionModel();
+//        selectionModel.select(manualsrcdttab);
+        if (srcExec.isSelected() && !trgExec.isSelected()) {
+            SingleSelectionModel<Tab> selectionModel = manualResultTabpane.getSelectionModel();
+            selectionModel.select(manualsrcdttab);
+        } else if (!srcExec.isSelected() && trgExec.isSelected()) {
+            SingleSelectionModel<Tab> selectionModel = manualResultTabpane.getSelectionModel();
+            selectionModel.select(manualtrgdttab);
+        } else {
+            SingleSelectionModel<Tab> selectionModel = manualResultTabpane.getSelectionModel();
+            selectionModel.select(manualsrcdttab);
+        }
+
         System.out.println("Src: " + tfsrcconname.getText());
         System.out.println("trg: " + tftrgconname.getText());
         //Lets execute single TestPlan
@@ -3825,40 +3926,104 @@ public class MainStageController implements Initializable {
 
         String srcCon = "", trgCon = "";
         if (this.getSourceType().equalsIgnoreCase("db")) {
+            System.out.println("Source DB");
             srcCon = getManualConnDetails(tfsrcconname, "", this.getSourceType(), "src");
         } else {
+            System.out.println("Source FF");
             srcCon = getManualConnDetails(tfsrcconname, "files/" + tfsrcconname.getText().substring(tfsrcconname.getText().lastIndexOf(".") + 1, tfsrcconname.getText().length()) + "" + tfsrcconname.getText().substring(tfsrcconname.getText().lastIndexOf("/"), tfsrcconname.getText().length()), this.getSourceType(), "src");
         }
 
         if (this.getTargetType().equalsIgnoreCase("db")) {
+            System.out.println("Target DB");
             trgCon = getManualConnDetails(tftrgconname, "", this.getTargetType(), "trg");
         } else {
-            trgCon = getManualConnDetails(tftrgconname, "files/" + this.getTableNameFromUI("trg") + "." + tftrgconname.getText().substring(tftrgconname.getText().lastIndexOf("/"), tftrgconname.getText().length()), this.getTargetType(), "trg");
+            System.out.println("Target FF");
+//            trgCon = getManualConnDetails(tftrgconname, "files/" + this.getTableNameFromUI("trg") + "." + tftrgconname.getText().substring(tftrgconname.getText().lastIndexOf("/"), tftrgconname.getText().length()), this.getTargetType(), "trg");
+            trgCon = getManualConnDetails(tftrgconname, "files/" + tftrgconname.getText().substring(tftrgconname.getText().lastIndexOf(".") + 1, tftrgconname.getText().length()) + "" + tftrgconname.getText().substring(tftrgconname.getText().lastIndexOf("/"), tftrgconname.getText().length()), this.getTargetType(), "trg");
         }
 
-        if (!srcCon.isEmpty() && !srcqry.isEmpty() && srcExec.isSelected()) {
+        System.out.println("Src Connection: " + srcCon);
+        System.out.println("Trg Connection: " + trgCon);
+
+        if (manualTestCaseExec) {
+            manualTestCaseExec = false;
             sqlParser.checkSqlQuery(srcqry);
-
+            System.out.println("Src Connection: " + srcCon);
             executeSingleTestcase(srcCon, srcqry, manualsrctabview);
-        } else {
-            if (srcExec.isSelected() && srcCon.isEmpty()) {
-                System.out.println("Src EXec: " + srcExec.isSelected());
-                System.out.println("Trg Exec : " + srcCon.isEmpty());
-                throw new Exception("Add the Source to Execute");
-            } else if (srcExec.isSelected() && !srcCon.isEmpty() && srcqry.isEmpty()) {
-                throw new Exception("Select the query to execute.");
-            }
-        }
-        if (!trgCon.isEmpty() && !trgqry.isEmpty()) {
             sqlParser.checkSqlQuery(trgqry);
+            System.out.println("Trg Connection: " + trgCon);
             executeSingleTestcase(trgCon, trgqry, manualtrgtabview);
-        } else {
-            if (trgExec.isSelected() && trgCon.isEmpty()) {
-                throw new Exception("Add the target to Execute");
-            } else if (trgExec.isSelected() && !trgCon.isEmpty() && trgqry.isEmpty()) {
-                throw new Exception("Select the query to execute.");
+            if (srcExec.isSelected() && trgExec.isSelected()) {
+                SingleSelectionModel<Tab> selectionModel = manualResultTabpane.getSelectionModel();
+                selectionModel.select(manualsrcdttab);
+            }
+            if (srcExec.isSelected()) {
+                SingleSelectionModel<Tab> selectionModel = manualResultTabpane.getSelectionModel();
+                selectionModel.select(manualsrcdttab);
+            }
+            if (trgExec.isSelected()) {
+                SingleSelectionModel<Tab> selectionModel = manualResultTabpane.getSelectionModel();
+                selectionModel.select(manualtrgdttab);
+            }
+
+        }
+
+        if (srcExec.isSelected() && trgExec.isSelected()) {
+            if ((!srcCon.isEmpty() && !srcqry.isEmpty()) && (!trgCon.isEmpty() && !trgqry.isEmpty())) {
+                sqlParser.checkSqlQuery(srcqry);
+                System.out.println("Src Connection: " + srcCon);
+                executeSingleTestcase(srcCon, srcqry, manualsrctabview);
+            } else {
+                throw new Exception("Select Source/Target query to execute");
             }
         }
+        if (srcExec.isSelected()) {
+            if (!srcCon.isEmpty() && !srcqry.isEmpty()) {
+                sqlParser.checkSqlQuery(srcqry);
+                System.out.println("Src Connection: " + srcCon);
+                executeSingleTestcase(srcCon, srcqry, manualsrctabview);
+            } else {
+                throw new Exception("Select Source query to execute");
+            }
+        }
+
+        if (trgExec.isSelected()) {
+            if (!trgCon.isEmpty() && !trgqry.isEmpty()) {
+                sqlParser.checkSqlQuery(trgqry);
+                System.out.println("Trg Connection: " + trgCon);
+                executeSingleTestcase(trgCon, trgqry, manualtrgtabview);
+            } else {
+                throw new Exception("Select Target query to execute");
+            }
+        }
+        manualClear.setDisable(false);
+        manualRun.setDisable(false);
+        manualSave.setDisable(false);
+
+//        if (!srcCon.isEmpty() && !srcqry.isEmpty() && srcExec.isSelected()) {
+//            sqlParser.checkSqlQuery(srcqry);
+//            System.out.println("Src Connection: " + srcCon);
+//            executeSingleTestcase(srcCon, srcqry, manualsrctabview);
+//        } else {
+//            if (srcExec.isSelected() && srcCon.isEmpty()) {
+//                System.out.println("Src EXec: " + srcExec.isSelected());
+//                System.out.println("Trg Exec : " + srcCon.isEmpty());
+//                throw new Exception("Add the Source to Execute");
+//            } else if (srcExec.isSelected() && !srcCon.isEmpty() && srcqry.isEmpty()) {
+//                throw new Exception("Select the query to execute.");
+//            }
+//        }
+//        if (!trgCon.isEmpty() && !trgqry.isEmpty()) {
+//            System.out.println("TRG Connection: " + trgCon);
+//            sqlParser.checkSqlQuery(trgqry);
+//            executeSingleTestcase(trgCon, trgqry, manualtrgtabview);
+//        } else {
+//            if (trgExec.isSelected() && trgCon.isEmpty()) {
+//                throw new Exception("Add the target to Execute");
+//            } else if (trgExec.isSelected() && !trgCon.isEmpty() && trgqry.isEmpty()) {
+//                throw new Exception("Select the query to execute.");
+//            }
+//        }
     }
 
     public void addColToTable(List colslist, TableView tbl) {
@@ -3883,7 +4048,10 @@ public class MainStageController implements Initializable {
     }
 
     private void executeSingleTestcase(String con, String qry, TableView tblView) {
-
+        manualsrctabview.getItems().clear();
+        manualtrgtabview.getItems().clear();
+        manualunmatchedtrgtabview.getItems().clear();
+        manualunmatchedsrctabview.getItems().clear();
         tblView.getItems().clear();
         tblView.getColumns().clear();
         Task task = new Task<Void>() {
@@ -4017,7 +4185,7 @@ public class MainStageController implements Initializable {
 
     @FXML
     public void manualRunButtonAction(ActionEvent ae) {
-
+        fileWhereClause = null;
         try {
             srctcidmap = new HashMap<String, String>();
             trgtcidmap = new HashMap<String, String>();
@@ -4025,9 +4193,8 @@ public class MainStageController implements Initializable {
             srctcidmap.put("1", manualjtasrcquery.getSelectedText());
             trgtcidmap.put("1", manualjtatrgquery.getSelectedText());
 
-            System.out.println("DatL :" + srctcidmap);
-            System.out.println("Datadf :" + trgtcidmap);
-
+//            System.out.println("DatL :" + srctcidmap);
+//            System.out.println("Datadf :" + trgtcidmap);
             setTestCaseRowSize(1);
 
             processSinglTestcase("1");
@@ -4079,146 +4246,175 @@ public class MainStageController implements Initializable {
      */
     @FXML
     public void manualSaveButton(ActionEvent ae) {
-        Map<String, TableView> tableData = getAllManualTable();
-        WritableWorkbook wbook;
-        WritableSheet shSheet;
-        WritableSheet tmpSheet;
-        int sheetIndex = 0;
-        if (!tableData.isEmpty()) {
-            try {
-                wbook = Workbook.createWorkbook(new File(fileWhereClause.get(0).toString().substring(0, fileWhereClause.get(0).toString().lastIndexOf('.')) + "_Results.xls"));
+
+        Stage mainstage = (Stage) mainvbox.getScene().getWindow();
+        DirectoryChooser directoryChooser = new DirectoryChooser();
+        FileChooser fc = new FileChooser();
+        File dirName = null;
+        resultsExport = "";
+        if (fileWhereClause != null) {
+            if (fileWhereClause.get(0) != null) {
+                String file = fileWhereClause.get(0).toString().replace("\\", "/");
+                String fileName = file.substring(file.lastIndexOf("/"), file.lastIndexOf(".") + 1) + "_results.xls";
+                dirName = directoryChooser.showDialog(mainstage);
+                if (dirName != null) {
+                    resultsExport = dirName.getAbsolutePath() + "/" + fileName;
+                }
+
+            } else {
+                dirName = directoryChooser.showDialog(mainstage);
+                if (dirName != null) {
+                    resultsExport = dirName.getAbsolutePath() + "/Manual_TestCase_" + new SimpleDateFormat("YYYY_MM_dd_HH_MM_SS").format(new Date()) + ".xls";
+                }
+            }
+        } else {
+            dirName = directoryChooser.showDialog(mainstage);
+            if (dirName != null) {
+                resultsExport = dirName.getAbsolutePath() + "/Manual_TestCase_" + new SimpleDateFormat("YYYY_MM_dd_HH_MM_SS").format(new Date()) + ".xls";
+            }
+        }
+
+        if (!resultsExport.isEmpty()) {
+
+            Map<String, TableView> tableData = getAllManualTable();
+            WritableWorkbook wbook;
+            WritableSheet shSheet;
+            WritableSheet tmpSheet;
+            int sheetIndex = 0;
+            if (!tableData.isEmpty()) {
+                try {
+                    wbook = Workbook.createWorkbook(new File(resultsExport));
 
 //                System.out.println("File Name: " + esbStmFile.getName().substring(0, esbStmFile.getName().lastIndexOf('.')));
-                int mapIndex = 0;
+                    int mapIndex = 0;
 
-                for (Map.Entry<String, TableView> entry : tableData.entrySet()) {
-                    String key = entry.getKey();
-                    TableView value = entry.getValue();
+                    for (Map.Entry<String, TableView> entry : tableData.entrySet()) {
+                        String key = entry.getKey();
+                        TableView value = entry.getValue();
 
-                    int k = 0, j = 0;
+                        int k = 0, j = 0;
 
-                    shSheet = wbook.createSheet(key.toUpperCase(), mapIndex++);
+                        shSheet = wbook.createSheet(key.toUpperCase(), mapIndex++);
 
-                    System.out.println("srccolnames" + value.getColumns());
+                        System.out.println("srccolnames" + value.getColumns());
 
-                    if (key.equalsIgnoreCase("MANUAL_SUMMARY")) {
-                        ObservableList<TableColumn<ManualSummaryBean, ?>> manualSrcCol = manualviewsummarytable.getColumns();
-                        WritableFont cellFont = new WritableFont(WritableFont.TIMES, 14);
-                        cellFont.setBoldStyle(WritableFont.BOLD);
-                        WritableCellFormat cellFormat = new WritableCellFormat(cellFont);
-                        for (int m = 0; m < value.getItems().size(); m++) {
+                        if (key.equalsIgnoreCase("MANUAL_SUMMARY")) {
+                            ObservableList<TableColumn<ManualSummaryBean, ?>> manualSrcCol = manualviewsummarytable.getColumns();
+                            WritableFont cellFont = new WritableFont(WritableFont.TIMES, 14);
+                            cellFont.setBoldStyle(WritableFont.BOLD);
+                            WritableCellFormat cellFormat = new WritableCellFormat(cellFont);
+                            for (int m = 0; m < value.getItems().size(); m++) {
 
-                            for (int l = 0; l < manualSrcCol.size(); l++) {
+                                for (int l = 0; l < manualSrcCol.size(); l++) {
 
-                                jxl.write.Label labTemp = new jxl.write.Label(l, 0, manualSrcCol.get(l).getText(), cellFormat);
-                                try {
-                                    shSheet.addCell(labTemp);
+                                    jxl.write.Label labTemp = new jxl.write.Label(l, 0, manualSrcCol.get(l).getText(), cellFormat);
+                                    try {
+                                        shSheet.addCell(labTemp);
 
-                                } catch (WriteException ex) {
-                                    Logger.getLogger(MainStageController.class
-                                            .getName()).log(Level.SEVERE, null, ex);
+                                    } catch (WriteException ex) {
+                                        Logger.getLogger(MainStageController.class
+                                                .getName()).log(Level.SEVERE, null, ex);
+                                    }
+
                                 }
 
-                            }
+                                String itemData = value.getItems().get(m).toString();
+                                itemData.replace("[", "").replace("]", "");
+                                System.out.println(value.getItems().get(m).toString());
 
-                            String itemData = value.getItems().get(m).toString();
-                            itemData.replace("[", "").replace("]", "");
-                            System.out.println(value.getItems().get(m).toString());
+                                String[] itemDataList = itemData.split("#");
+                                System.out.println("Lenght: " + itemDataList.length);
+                                for (int l = 0; l < itemDataList.length; l++) {
+                                    String data = itemDataList[l];
+                                    jxl.write.Label labTemp = new jxl.write.Label(l, m + 1, data);
+                                    try {
+                                        shSheet.addCell(labTemp);
 
-                            String[] itemDataList = itemData.split("#");
-                            System.out.println("Lenght: " + itemDataList.length);
-                            for (int l = 0; l < itemDataList.length; l++) {
-                                String data = itemDataList[l];
-                                jxl.write.Label labTemp = new jxl.write.Label(l, m + 1, data);
-                                try {
-                                    shSheet.addCell(labTemp);
-
-                                } catch (WriteException ex) {
-                                    Logger.getLogger(MainStageController.class
-                                            .getName()).log(Level.SEVERE, null, ex);
-                                }
-
-                            }
-
-                        }
-
-                    } else {
-
-                        //For Complete Data
-                        List cmpltColNames;
-
-                        WritableFont cellFont = new WritableFont(WritableFont.TIMES, 14);
-                        cellFont.setBoldStyle(WritableFont.BOLD);
-                        WritableCellFormat cellFormat = new WritableCellFormat(cellFont);
-                        //cellFormat.setWrap(true); 
-
-                        for (int m = 0; m < value.getItems().size(); m++) {
-                            if (key.contains("src")) {
-                                cmpltColNames = src_table;
-                            } else {
-                                cmpltColNames = trg_table;
-                            }
-                            ObservableList<TableColumn> cmpltColNames1 = value.getColumns();
-
-                            for (int l = 0; l < cmpltColNames1.size(); l++) {
-
-                                jxl.write.Label labTemp = new jxl.write.Label(l, 0, cmpltColNames1.get(l).getText(), cellFormat);
-
-                                try {
-                                    shSheet.setColumnView(l, cmpltColNames1.get(l).getText().length());
-                                    shSheet.addCell(labTemp);
-
-                                } catch (WriteException ex) {
-                                    Logger.getLogger(MainStageController.class
-                                            .getName()).log(Level.SEVERE, null, ex);
+                                    } catch (WriteException ex) {
+                                        Logger.getLogger(MainStageController.class
+                                                .getName()).log(Level.SEVERE, null, ex);
+                                    }
 
                                 }
 
                             }
 
-                            List itemData = (List) value.getItems().get(m);
+                        } else {
 
-                            System.out.println("Item Data: " + itemData);
+                            //For Complete Data
+                            List cmpltColNames;
 
-                            for (int l = 0; l < itemData.size(); l++) {
-                                String data = null;
-                                if (itemData.get(l) != null) {
-                                    data = itemData.get(l).toString();
+                            WritableFont cellFont = new WritableFont(WritableFont.TIMES, 14);
+                            cellFont.setBoldStyle(WritableFont.BOLD);
+                            WritableCellFormat cellFormat = new WritableCellFormat(cellFont);
+                            //cellFormat.setWrap(true); 
+
+                            for (int m = 0; m < value.getItems().size(); m++) {
+                                if (key.contains("src")) {
+                                    cmpltColNames = src_table;
                                 } else {
-                                    data = "";
+                                    cmpltColNames = trg_table;
                                 }
-                                System.out.println("Dat: " + data);
-                                jxl.write.Label labTemp = new jxl.write.Label(l, m + 1, data);
-                                try {
+                                ObservableList<TableColumn> cmpltColNames1 = value.getColumns();
 
-                                    shSheet.setColumnView(l, data.length());
-                                    shSheet.addCell(labTemp);
+                                for (int l = 0; l < cmpltColNames1.size(); l++) {
 
-                                } catch (WriteException ex) {
-                                    Logger.getLogger(MainStageController.class
-                                            .getName()).log(Level.SEVERE, null, ex);
+                                    jxl.write.Label labTemp = new jxl.write.Label(l, 0, cmpltColNames1.get(l).getText(), cellFormat);
+
+                                    try {
+                                        shSheet.setColumnView(l, cmpltColNames1.get(l).getText().length());
+                                        shSheet.addCell(labTemp);
+
+                                    } catch (WriteException ex) {
+                                        Logger.getLogger(MainStageController.class
+                                                .getName()).log(Level.SEVERE, null, ex);
+
+                                    }
+
                                 }
+
+                                List itemData = (List) value.getItems().get(m);
+
+//                                System.out.println("Item Data: " + itemData);
+                                for (int l = 0; l < itemData.size(); l++) {
+                                    String data = null;
+                                    if (itemData.get(l) != null) {
+                                        data = itemData.get(l).toString();
+                                    } else {
+                                        data = "";
+                                    }
+//                                    System.out.println("Dat: " + data);
+                                    jxl.write.Label labTemp = new jxl.write.Label(l, m + 1, data);
+                                    try {
+
+                                        shSheet.setColumnView(l, data.length());
+                                        shSheet.addCell(labTemp);
+
+                                    } catch (WriteException ex) {
+                                        Logger.getLogger(MainStageController.class
+                                                .getName()).log(Level.SEVERE, null, ex);
+                                    }
+                                }
+
                             }
 
                         }
 
                     }
 
+                    wbook.write();
+                    wbook.close();
+
+                    new AlertUI("Results Saved Successfully");
+
+                } catch (IOException | WriteException ex) {
+                    Logger.getLogger(MainStageController.class
+                            .getName()).log(Level.SEVERE, null, ex);
+                    new ExceptionUI(ex);
+
                 }
-
-                wbook.write();
-                wbook.close();
-
-                new AlertUI("Results Saved Successfully");
-
-            } catch (IOException | WriteException ex) {
-                Logger.getLogger(MainStageController.class
-                        .getName()).log(Level.SEVERE, null, ex);
-                new ExceptionUI(ex);
-
             }
         }
-
     }
 
     public String setWhereCondition(String sql, String whereClause, String groupClause, String havingClause, String orderBy) {

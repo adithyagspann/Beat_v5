@@ -8,7 +8,7 @@
   </information>
   <resources>
     <j2se version="1.6+" href="http://java.sun.com/products/autodl/j2se"/>
-    <jar href="BEAT_ETL_v5.0.jar" size="265477" download="eager" />
+    <jar href="BEAT_ETL_v5.0.jar" size="278543" download="eager" />
     <jar href="lib\apache-ant-1.8.2.jar" size="1933743" download="eager" />
     <jar href="lib\commons-collections4-4.1.jar" size="751238" download="eager" />
     <jar href="lib\commons-net-3.3.jar" size="280983" download="eager" />
